@@ -36,6 +36,7 @@
       color: var(--text);
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
 
     /* ===== LOGIN SCREEN ===== */
@@ -45,7 +46,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 24px;
+      padding: 20px;
       background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%);
       position: relative;
       overflow: hidden;
@@ -70,7 +71,7 @@
     .login-card {
       background: var(--card);
       border-radius: 24px;
-      padding: 40px 32px;
+      padding: 32px 24px;
       width: 100%;
       max-width: 420px;
       box-shadow: var(--shadow-lg);
@@ -86,17 +87,18 @@
 
     .logo-container {
       text-align: center;
-      margin-bottom: 32px;
+      margin-bottom: 24px;
     }
 
     .logo-container img {
-      width: 200px;
+      width: 180px;
       height: auto;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
+      object-fit: contain;
     }
 
     .company-name {
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 600;
       color: var(--text-light);
       letter-spacing: 2px;
@@ -104,37 +106,37 @@
     }
 
     .login-title {
-      font-size: 24px;
+      font-size: 22px;
       font-weight: 800;
       color: var(--primary);
       text-align: center;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .login-subtitle {
-      font-size: 14px;
+      font-size: 13px;
       color: var(--text-light);
       text-align: center;
-      margin-bottom: 32px;
+      margin-bottom: 28px;
     }
 
     .form-group {
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
 
     .form-label {
       display: block;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 600;
       color: var(--text);
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
 
     .form-input {
       width: 100%;
-      padding: 14px 18px;
+      padding: 14px 16px;
       border: 2px solid var(--border);
       border-radius: 14px;
       font-size: 16px;
@@ -175,44 +177,34 @@
       transform: translateY(0);
     }
 
-    .error-msg {
-      background: #fef2f2;
-      border: 1px solid #fecaca;
-      color: var(--danger);
-      padding: 14px 18px;
-      border-radius: 12px;
-      font-size: 14px;
-      font-weight: 500;
-      margin-top: 16px;
-      display: none;
-      align-items: center;
-      gap: 10px;
+    .login-btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
     }
 
-    .error-msg.show { display: flex; }
-
     .demo-section {
-      margin-top: 28px;
-      padding-top: 24px;
+      margin-top: 24px;
+      padding-top: 20px;
       border-top: 1px solid var(--border);
     }
 
     .demo-title {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
       color: var(--text-light);
       text-transform: uppercase;
       letter-spacing: 1px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       text-align: center;
     }
 
     .demo-item {
       background: #f8fafc;
       border-radius: 10px;
-      padding: 12px 16px;
-      margin-bottom: 8px;
-      font-size: 13px;
+      padding: 10px 14px;
+      margin-bottom: 6px;
+      font-size: 12px;
       color: var(--text);
     }
 
@@ -221,9 +213,9 @@
     }
 
     .security-note {
-      margin-top: 20px;
+      margin-top: 16px;
       text-align: center;
-      font-size: 12px;
+      font-size: 11px;
       color: var(--text-light);
       display: flex;
       align-items: center;
@@ -231,17 +223,130 @@
       gap: 6px;
     }
 
+    /* ===== MODAL/POPUP ===== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      padding: 20px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .modal-overlay.show {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .modal-box {
+      background: var(--card);
+      border-radius: 20px;
+      padding: 32px 24px;
+      width: 100%;
+      max-width: 360px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      animation: modalSlide 0.4s ease;
+    }
+
+    @keyframes modalSlide {
+      from { opacity: 0; transform: scale(0.9) translateY(20px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .modal-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      font-size: 28px;
+    }
+
+    .modal-icon.error {
+      background: #fef2f2;
+      color: var(--danger);
+    }
+
+    .modal-icon.success {
+      background: #ecfdf5;
+      color: var(--success);
+    }
+
+    .modal-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .modal-text {
+      font-size: 14px;
+      color: var(--text-light);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .modal-btn {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .modal-btn.primary {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: #fff;
+    }
+
+    .modal-btn.primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(30,58,95,0.3);
+    }
+
+    .modal-btn.danger {
+      background: linear-gradient(135deg, var(--danger) 0%, #dc2626 100%);
+      color: #fff;
+    }
+
+    .modal-btn.danger:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(239,68,68,0.3);
+    }
+
     /* ===== DASHBOARD ===== */
     .dashboard {
       display: none;
       min-height: 100vh;
       background: var(--bg);
+      animation: fadeInPage 0.5s ease;
+    }
+
+    @keyframes fadeInPage {
+      from { opacity: 0; transform: translateX(20px); }
+      to { opacity: 1; transform: translateX(0); }
     }
 
     .dash-header {
       background: linear-gradient(135deg, var(--primary) 0%, #0f172a 100%);
       color: #fff;
-      padding: 24px 20px;
+      padding: 20px 16px;
       position: sticky;
       top: 0;
       z-index: 100;
@@ -252,22 +357,22 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     .dash-logo {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
 
     .dash-logo img {
-      width: 50px;
+      width: 40px;
       height: auto;
     }
 
     .dash-logo-text {
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 600;
       opacity: 0.8;
       letter-spacing: 1px;
@@ -278,9 +383,9 @@
       background: rgba(255,255,255,0.15);
       border: 1px solid rgba(255,255,255,0.25);
       color: #fff;
-      padding: 8px 16px;
+      padding: 8px 14px;
       border-radius: 10px;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.3s ease;
@@ -293,27 +398,27 @@
     .employee-info {
       background: rgba(255,255,255,0.1);
       backdrop-filter: blur(10px);
-      border-radius: 16px;
-      padding: 16px;
+      border-radius: 14px;
+      padding: 14px;
       border: 1px solid rgba(255,255,255,0.15);
     }
 
     .employee-name {
-      font-size: 20px;
+      font-size: 18px;
       font-weight: 800;
       margin-bottom: 4px;
     }
 
     .employee-meta {
-      font-size: 13px;
+      font-size: 12px;
       opacity: 0.85;
       display: flex;
       flex-wrap: wrap;
-      gap: 4px 16px;
+      gap: 4px 12px;
     }
 
     .dash-content {
-      padding: 20px;
+      padding: 16px;
       max-width: 900px;
       margin: 0 auto;
     }
@@ -321,14 +426,14 @@
     .summary-cards {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      margin-bottom: 24px;
+      gap: 10px;
+      margin-bottom: 20px;
     }
 
     .summary-card {
       background: var(--card);
       border-radius: 16px;
-      padding: 20px 16px;
+      padding: 18px 14px;
       text-align: center;
       box-shadow: var(--shadow);
       transition: transform 0.3s ease;
@@ -339,14 +444,14 @@
     }
 
     .summary-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 0 auto 10px;
-      font-size: 20px;
+      margin: 0 auto 8px;
+      font-size: 18px;
     }
 
     .summary-icon.blue { background: #dbeafe; }
@@ -355,25 +460,25 @@
     .summary-icon.red { background: #fee2e2; }
 
     .summary-value {
-      font-size: 22px;
+      font-size: 20px;
       font-weight: 800;
       color: var(--text);
     }
 
     .summary-label {
-      font-size: 12px;
+      font-size: 11px;
       color: var(--text-light);
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      margin-top: 4px;
+      margin-top: 2px;
     }
 
     .section-title {
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 800;
       color: var(--text);
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       display: flex;
       align-items: center;
       gap: 10px;
@@ -382,38 +487,40 @@
     .section-title::before {
       content: '';
       width: 4px;
-      height: 24px;
+      height: 20px;
       background: var(--accent);
       border-radius: 2px;
     }
 
     .timesheet-table-wrap {
       background: var(--card);
-      border-radius: 20px;
+      border-radius: 16px;
       box-shadow: var(--shadow);
       overflow: hidden;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
+      overflow-x: auto;
     }
 
     .timesheet-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 13px;
+      font-size: 12px;
+      min-width: 600px;
     }
 
     .timesheet-table th {
       background: var(--primary);
       color: #fff;
-      padding: 14px 10px;
+      padding: 12px 8px;
       font-weight: 700;
-      font-size: 11px;
+      font-size: 10px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
       white-space: nowrap;
     }
 
     .timesheet-table td {
-      padding: 12px 10px;
+      padding: 10px 8px;
       text-align: center;
       border-bottom: 1px solid var(--border);
       font-weight: 500;
@@ -446,9 +553,9 @@
 
     .badge {
       display: inline-block;
-      padding: 3px 10px;
+      padding: 2px 8px;
       border-radius: 20px;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 700;
     }
 
@@ -459,25 +566,25 @@
     .totals-card {
       background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
       color: #fff;
-      border-radius: 20px;
-      padding: 24px;
+      border-radius: 16px;
+      padding: 20px;
       box-shadow: var(--shadow-lg);
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
 
     .totals-title {
-      font-size: 14px;
+      font-size: 12px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 1px;
       opacity: 0.8;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     .totals-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
+      gap: 12px;
     }
 
     .total-item {
@@ -485,12 +592,12 @@
     }
 
     .total-value {
-      font-size: 26px;
+      font-size: 22px;
       font-weight: 800;
     }
 
     .total-label {
-      font-size: 12px;
+      font-size: 11px;
       opacity: 0.8;
       margin-top: 4px;
       text-transform: uppercase;
@@ -499,47 +606,47 @@
 
     .notes-card {
       background: var(--card);
-      border-radius: 20px;
-      padding: 24px;
+      border-radius: 16px;
+      padding: 20px;
       box-shadow: var(--shadow);
-      margin-bottom: 24px;
+      margin-bottom: 20px;
       border-left: 4px solid var(--accent);
     }
 
     .notes-title {
-      font-size: 14px;
+      font-size: 12px;
       font-weight: 700;
       color: var(--accent);
       text-transform: uppercase;
       letter-spacing: 1px;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
 
     .notes-text {
-      font-size: 14px;
+      font-size: 13px;
       color: var(--text);
       line-height: 1.7;
     }
 
     .footer {
       text-align: center;
-      padding: 24px;
-      font-size: 12px;
+      padding: 20px;
+      font-size: 11px;
       color: var(--text-light);
     }
 
     .footer img {
-      width: 80px;
+      width: 60px;
       height: auto;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       opacity: 0.6;
     }
 
-    /* Loading */
+    /* Loading Spinner */
     .loading-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(255,255,255,0.9);
+      background: rgba(255,255,255,0.95);
       display: none;
       align-items: center;
       justify-content: center;
@@ -548,7 +655,9 @@
       gap: 16px;
     }
 
-    .loading-overlay.show { display: flex; }
+    .loading-overlay.show {
+      display: flex;
+    }
 
     .spinner {
       width: 48px;
@@ -565,15 +674,30 @@
 
     /* Responsive */
     @media (max-width: 480px) {
-      .login-card { padding: 32px 24px; border-radius: 20px; }
-      .logo-container img { width: 160px; }
-      .summary-cards { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-      .summary-card { padding: 16px 12px; }
+      .login-card { padding: 28px 20px; border-radius: 20px; }
+      .logo-container img { width: 150px; }
+      .login-title { font-size: 20px; }
+      .summary-cards { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+      .summary-card { padding: 14px 10px; }
       .summary-value { font-size: 18px; }
-      .timesheet-table-wrap { border-radius: 16px; overflow-x: auto; }
+      .summary-icon { width: 36px; height: 36px; font-size: 16px; }
+      .timesheet-table-wrap { border-radius: 12px; }
       .timesheet-table { min-width: 600px; }
-      .totals-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
-      .total-value { font-size: 20px; }
+      .timesheet-table th { padding: 10px 6px; font-size: 9px; }
+      .timesheet-table td { padding: 8px 6px; font-size: 11px; }
+      .totals-grid { gap: 8px; }
+      .total-value { font-size: 18px; }
+      .dash-content { padding: 12px; }
+      .dash-header { padding: 16px 12px; }
+      .employee-name { font-size: 16px; }
+      .employee-meta { font-size: 11px; }
+      .modal-box { padding: 24px 20px; }
+    }
+
+    @media (min-width: 768px) {
+      .summary-cards { grid-template-columns: repeat(4, 1fr); }
+      .login-card { padding: 40px 32px; }
+      .dash-content { padding: 24px; }
     }
   </style>
 </head>
@@ -585,11 +709,31 @@
   <div style="font-weight:600;color:var(--primary);">Loading...</div>
 </div>
 
+<!-- ERROR MODAL -->
+<div class="modal-overlay" id="errorModal">
+  <div class="modal-box">
+    <div class="modal-icon error">❌</div>
+    <div class="modal-title">Invalid Credentials</div>
+    <div class="modal-text">The Employee ID or Date of Birth you entered is incorrect. Please check and try again.</div>
+    <button class="modal-btn danger" onclick="closeModal()">Try Again</button>
+  </div>
+</div>
+
+<!-- SUCCESS MODAL -->
+<div class="modal-overlay" id="successModal">
+  <div class="modal-box">
+    <div class="modal-icon success">✅</div>
+    <div class="modal-title">Login Successful</div>
+    <div class="modal-text">Welcome! Your timesheet is loading...</div>
+  </div>
+</div>
+
 <!-- LOGIN SCREEN -->
 <div class="login-screen" id="loginScreen">
   <div class="login-card">
     <div class="logo-container">
-      <img src="https://i.imgur.com/placeholder.png" alt="NBTC Logo" id="loginLogo">
+      <img src="logo.png" alt="NBTC Logo" id="loginLogo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div style="display:none; width:80px; height:80px; background:linear-gradient(135deg, #1e3a5f, #e31e24); border-radius:16px; margin:0 auto 12px; align-items:center; justify-content:center; color:white; font-weight:800; font-size:24px;">NBTC</div>
       <div class="company-name">NASER M. AL-BADDAH & PARTNER</div>
     </div>
 
@@ -599,7 +743,7 @@
     <form id="loginForm" onsubmit="return false;">
       <div class="form-group">
         <label class="form-label">Employee ID</label>
-        <input type="text" class="form-input" id="empId" placeholder="Enter Employee ID" maxlength="10" autocomplete="off">
+        <input type="text" class="form-input" id="empId" placeholder="Enter Employee ID" maxlength="10" autocomplete="off" inputmode="numeric">
       </div>
       <div class="form-group">
         <label class="form-label">Date of Birth</label>
@@ -607,11 +751,6 @@
       </div>
       <button type="submit" class="login-btn" id="loginBtn">View Timesheet</button>
     </form>
-
-    <div class="error-msg" id="errorMsg">
-      <span>⚠️</span>
-      <span>Invalid Employee ID or Date of Birth. Please try again.</span>
-    </div>
 
     <div class="demo-section">
       <div class="demo-title">Demo Credentials</div>
@@ -634,7 +773,8 @@
   <div class="dash-header">
     <div class="dash-header-top">
       <div class="dash-logo">
-        <img src="https://i.imgur.com/placeholder.png" alt="NBTC" id="dashLogo">
+        <img src="logo.png" alt="NBTC" id="dashLogo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div style="display:none; width:36px; height:36px; background:linear-gradient(135deg, #1e3a5f, #e31e24); border-radius:8px; align-items:center; justify-content:center; color:white; font-weight:700; font-size:14px;">NBTC</div>
         <div class="dash-logo-text">NASER M. AL-BADDAH & PARTNER</div>
       </div>
       <button class="logout-btn" onclick="logout()">Logout</button>
@@ -668,7 +808,7 @@
     <div class="notes-card" id="notesCard"></div>
 
     <div class="footer">
-      <img src="https://i.imgur.com/placeholder.png" alt="NBTC" id="footerLogo">
+      <img src="logo.png" alt="NBTC" id="footerLogo" onerror="this.style.display='none';">
       <div>© 2026 NBTC — NASER M. AL-BADDAH & PARTNER</div>
       <div style="margin-top:4px;opacity:0.7;">All rights reserved.</div>
     </div>
@@ -737,4 +877,218 @@ const EMPLOYEES = [
       {dt:6, project:"P024", wh:0, ot:0, incentive:"", ta:0, sun:true, hol:false},
       {dt:7, project:"P024", wh:0, ot:0, incentive:"", ta:0, sun:true, hol:false},
       {dt:8, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
-      {dt:9, project:
+      {dt:9, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
+      {dt:10, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
+      {dt:11, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
+      {dt:12, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
+      {dt:13, project:"P024", wh:0, ot:0, incentive:"", ta:0, sun:true, hol:false},
+      {dt:14, project:"P024", wh:0, ot:0, incentive:"", ta:0, sun:true, hol:false},
+      {dt:15, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
+      {dt:16, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
+      {dt:17, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
+      {dt:18, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
+      {dt:19, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
+      {dt:20, project:"P024", wh:0, ot:0, incentive:"", ta:0, sun:true, hol:false},
+      {dt:21, project:"P024", wh:0, ot:0, incentive:"", ta:0, sun:true, hol:false},
+      {dt:22, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
+      {dt:23, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
+      {dt:24, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
+      {dt:25, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
+      {dt:26, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
+      {dt:27, project:"P024", wh:0, ot:0, incentive:"", ta:0, sun:true, hol:false},
+      {dt:28, project:"P024", wh:0, ot:0, incentive:"", ta:0, sun:true, hol:false},
+      {dt:29, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
+      {dt:30, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
+    ],
+    notes: "Payment will be processed on the 5th of next month. Please verify your bank details with HR."
+  }
+];
+
+// ==================== MODAL FUNCTIONS ====================
+function showErrorModal() {
+  document.getElementById('errorModal').classList.add('show');
+}
+
+function showSuccessModal() {
+  document.getElementById('successModal').classList.add('show');
+}
+
+function closeModal() {
+  document.getElementById('errorModal').classList.remove('show');
+  document.getElementById('successModal').classList.remove('show');
+}
+
+// Close modal on overlay click
+document.getElementById('errorModal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+document.getElementById('successModal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// ==================== LOGIN ====================
+const loginForm = document.getElementById('loginForm');
+const loginBtn = document.getElementById('loginBtn');
+const loadingOverlay = document.getElementById('loadingOverlay');
+
+// DOB auto-format
+document.getElementById('dob').addEventListener('input', function(e) {
+  let v = e.target.value.replace(/\D/g, '');
+  if (v.length >= 2) v = v.slice(0,2) + '/' + v.slice(2);
+  if (v.length >= 5) v = v.slice(0,5) + '/' + v.slice(5,8);
+  e.target.value = v;
+});
+
+loginBtn.addEventListener('click', function() {
+  const empId = document.getElementById('empId').value.trim();
+  const dob = document.getElementById('dob').value.trim();
+
+  if (!empId || !dob) {
+    showErrorModal();
+    return;
+  }
+
+  // Show loading
+  loadingOverlay.classList.add('show');
+  loginBtn.disabled = true;
+
+  setTimeout(() => {
+    const employee = EMPLOYEES.find(e => e.empId === empId && e.dob === dob);
+
+    if (employee) {
+      // Success - show success modal then dashboard
+      loadingOverlay.classList.remove('show');
+      showSuccessModal();
+
+      setTimeout(() => {
+        closeModal();
+        showDashboard(employee);
+      }, 1500);
+    } else {
+      // Error - show error popup
+      loadingOverlay.classList.remove('show');
+      loginBtn.disabled = false;
+      showErrorModal();
+    }
+  }, 1000);
+});
+
+// ==================== DASHBOARD ====================
+function showDashboard(emp) {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'block';
+  window.scrollTo(0, 0);
+
+  // Employee info
+  document.getElementById('employeeInfo').innerHTML = `
+    <div class="employee-name">${emp.name}</div>
+    <div class="employee-meta">
+      <span>📋 ${emp.designation}</span> |
+      <span>🏢 ${emp.company}</span> |
+      <span>📅 ${emp.month}</span> |
+      <span>🔧 ${emp.project}</span>
+    </div>
+  `;
+
+  // Calculate totals
+  let totalWH = 0, totalOT = 0, totalTA = 0, workDays = 0, sunDays = 0, holDays = 0;
+  emp.rows.forEach(r => {
+    totalWH += r.wh;
+    totalOT += r.ot;
+    totalTA += r.ta;
+    if (r.wh > 0) workDays++;
+    if (r.sun) sunDays++;
+    if (r.hol) holDays++;
+  });
+
+  // Summary cards
+  document.getElementById('summaryCards').innerHTML = `
+    <div class="summary-card">
+      <div class="summary-icon blue">📅</div>
+      <div class="summary-value">${workDays}</div>
+      <div class="summary-label">Work Days</div>
+    </div>
+    <div class="summary-card">
+      <div class="summary-icon green">⏰</div>
+      <div class="summary-value">${totalWH}</div>
+      <div class="summary-label">Total Hours</div>
+    </div>
+    <div class="summary-card">
+      <div class="summary-icon orange">🌙</div>
+      <div class="summary-value">${totalOT}</div>
+      <div class="summary-label">OT Hours</div>
+    </div>
+    <div class="summary-card">
+      <div class="summary-icon red">🚗</div>
+      <div class="summary-value">${totalTA}</div>
+      <div class="summary-label">TA Days</div>
+    </div>
+  `;
+
+  // Timesheet table
+  const tbody = document.getElementById('timesheetBody');
+  tbody.innerHTML = emp.rows.map(r => {
+    let typeBadge = '<span class="badge badge-norm">Normal</span>';
+    let rowClass = '';
+    if (r.sun) { typeBadge = '<span class="badge badge-sun">Sunday</span>'; rowClass = 'sun-day'; }
+    if (r.hol) { typeBadge = '<span class="badge badge-hol">Holiday</span>'; rowClass = 'hol-day'; }
+
+    return `
+      <tr class="${rowClass}">
+        <td class="day-cell">${r.dt}</td>
+        <td>${r.project || '-'}</td>
+        <td>${r.wh || '-'}</td>
+        <td>${r.ot || '-'}</td>
+        <td>${r.incentive || '-'}</td>
+        <td>${r.ta || '-'}</td>
+        <td>${typeBadge}</td>
+      </tr>
+    `;
+  }).join('');
+
+  // Totals card
+  document.getElementById('totalsCard').innerHTML = `
+    <div class="totals-title">Monthly Summary</div>
+    <div class="totals-grid">
+      <div class="total-item">
+        <div class="total-value">${totalWH}</div>
+        <div class="total-label">Work Hrs</div>
+      </div>
+      <div class="total-item">
+        <div class="total-value">${totalOT}</div>
+        <div class="total-label">OT Hrs</div>
+      </div>
+      <div class="total-item">
+        <div class="total-value">${totalTA}</div>
+        <div class="total-label">TA Days</div>
+      </div>
+    </div>
+  `;
+
+  // Notes
+  document.getElementById('notesCard').innerHTML = `
+    <div class="notes-title">Important Notice</div>
+    <div class="notes-text">${emp.notes}</div>
+  `;
+}
+
+// ==================== LOGOUT ====================
+function logout() {
+  document.getElementById('dashboard').style.display = 'none';
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('empId').value = '';
+  document.getElementById('dob').value = '';
+  document.getElementById('loginBtn').disabled = false;
+  window.scrollTo(0, 0);
+}
+
+// ==================== SERVICE WORKER ====================
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js')
+    .then(() => console.log('SW registered'))
+    .catch(err => console.log('SW failed:', err));
+}
+</script>
+
+</body>
+</html>
