@@ -1,8 +1,8 @@
 {
-  "name": "Timesheet Portal - NBTC",
-  "short_name": "Timesheet",
+  "name": "NBTC Timesheet Portal",
+  "short_name": "NBTC Timesheet",
   "description": "NASER M. AL-BADDAH & PARTNER Employee Timesheet Portal",
-  "start_url": "/",
+  "start_url": "/NBTC-/",
   "display": "standalone",
   "background_color": "#0f172a",
   "theme_color": "#1e3a5f",
@@ -22,5 +22,5 @@
     }
   ],
   "categories": ["business", "productivity"],
-  "lang": "hi"
+  "lang": "en"
 }
