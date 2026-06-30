@@ -1,5 +1,5 @@
-const CACHE = "timesheet-v1";
-const FILES = ["/", "/index.html", "/manifest.json"];
+const CACHE = "timesheet-v2";
+const FILES = ["./", "./index.html", "./manifest.json"];
 
 self.addEventListener("install", e => {
   e.waitUntil(
