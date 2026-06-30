@@ -664,7 +664,7 @@
         <label class="form-label">Date of Birth</label>
         <input type="text" class="form-input" id="dob" placeholder="DD/MM/YYYY" maxlength="10" autocomplete="off">
       </div>
-      <button type="button" class="login-btn" id="loginBtn" onclick="handleLogin(event)">View Timesheet</button>
+      <button type="button" class="login-btn" id="loginBtn" onclick="handleLogin(event); return false;" ontouchstart="handleLogin(event); return false;">View Timesheet</button>
     </form>
 
     <div class="demo-section">
@@ -756,5 +756,4 @@ const EMPLOYEES = [
       {dt:2, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
       {dt:3, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
       {dt:4, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
-      {dt:5, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
-      {dt:6, project:"P024", wh:0, ot:0, i
+      {dt:5, project:"P024", wh:8, ot:2, incentive:"", ta:1, s
