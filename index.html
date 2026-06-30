@@ -1,554 +1,740 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Timesheet Portal</title>
-  <meta name="description" content="NBTC Employee Timesheet Portal" />
-
-  <!-- PWA Meta Tags -->
-  <meta name="theme-color" content="#1e3a5f" />
-  <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Timesheet" />
-
-  <!-- Icons -->
-  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
-  <link rel="apple-touch-icon" href="icons/icon-192.png" />
-  <link rel="manifest" href="manifest.json" />
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#1e3a5f">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>NBTC Timesheet Portal</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f1f5f9; min-height: 100vh; }
+    :root {
+      --primary: #1e3a5f;
+      --primary-light: #2a4a73;
+      --accent: #e31e24;
+      --accent-light: #f04a4f;
+      --bg: #f0f4f8;
+      --card: #ffffff;
+      --text: #1a1a2e;
+      --text-light: #64748b;
+      --border: #e2e8f0;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --shadow: 0 4px 20px rgba(0,0,0,0.08);
+      --shadow-lg: 0 10px 40px rgba(0,0,0,0.12);
+    }
 
-    /* ── Login ── */
-    #loginScreen {
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
       min-height: 100vh;
-      background: linear-gradient(160deg, #0f172a 0%, #1e3a5f 60%, #2563eb 100%);
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ===== LOGIN SCREEN ===== */
+    .login-screen {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .login-screen::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(227,30,36,0.08) 0%, transparent 50%);
+      animation: pulse 8s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.5; }
+      50% { transform: scale(1.1); opacity: 0.8; }
+    }
+
+    .login-card {
+      background: var(--card);
+      border-radius: 24px;
+      padding: 40px 32px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      z-index: 1;
+      animation: slideUp 0.6s ease-out;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .logo-container {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .logo-container img {
+      width: 200px;
+      height: auto;
+      margin-bottom: 16px;
+    }
+
+    .company-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-light);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .login-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--primary);
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .login-subtitle {
+      font-size: 14px;
+      color: var(--text-light);
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 14px 18px;
+      border: 2px solid var(--border);
+      border-radius: 14px;
+      font-size: 16px;
+      font-family: inherit;
+      transition: all 0.3s ease;
+      background: #fafbfc;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: #fff;
+      box-shadow: 0 0 0 4px rgba(30,58,95,0.1);
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: #fff;
+      border: none;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 8px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .login-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(30,58,95,0.3);
+    }
+
+    .login-btn:active {
+      transform: translateY(0);
+    }
+
+    .error-msg {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: var(--danger);
+      padding: 14px 18px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      margin-top: 16px;
+      display: none;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .error-msg.show { display: flex; }
+
+    .demo-section {
+      margin-top: 28px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+
+    .demo-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-light);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    .demo-item {
+      background: #f8fafc;
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin-bottom: 8px;
+      font-size: 13px;
+      color: var(--text);
+    }
+
+    .demo-item strong {
+      color: var(--primary);
+    }
+
+    .security-note {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    /* ===== DASHBOARD ===== */
+    .dashboard {
+      display: none;
+      min-height: 100vh;
+      background: var(--bg);
+    }
+
+    .dash-header {
+      background: linear-gradient(135deg, var(--primary) 0%, #0f172a 100%);
+      color: #fff;
       padding: 24px 20px;
-    }
-    .logo-wrap {
-      width: 80px; height: 80px;
-      background: linear-gradient(135deg, #2563eb, #60a5fa);
-      border-radius: 24px; display: flex; align-items: center; justify-content: center;
-      font-size: 36px; margin-bottom: 20px;
-      box-shadow: 0 12px 40px rgba(37,99,235,0.5);
-    }
-    .app-title { color: white; font-size: 28px; font-weight: 800; letter-spacing: -0.5px; }
-    .app-sub   { color: #93c5fd; font-size: 13px; margin-top: 6px; margin-bottom: 36px; text-align: center; }
-
-    .card {
-      background: white; border-radius: 24px; padding: 28px 24px;
-      width: 100%; max-width: 400px;
-      box-shadow: 0 24px 64px rgba(0,0,0,0.4);
-    }
-    .card h2 { font-size: 20px; font-weight: 800; color: #0f172a; margin-bottom: 24px; }
-    .field-label { font-size: 13px; font-weight: 600; color: #475569; display: block; margin-bottom: 8px; }
-    .field-input {
-      width: 100%; padding: 14px 16px; border: 2px solid #e2e8f0;
-      border-radius: 14px; font-size: 16px; color: #0f172a; outline: none;
-      transition: border 0.2s; margin-bottom: 18px;
-      -webkit-appearance: none;
-    }
-    .field-input:focus { border-color: #2563eb; }
-    .btn-primary {
-      width: 100%; padding: 15px; background: linear-gradient(135deg, #2563eb, #3b82f6);
-      color: white; border: none; border-radius: 14px; font-weight: 700;
-      font-size: 16px; cursor: pointer; box-shadow: 0 4px 16px rgba(37,99,235,0.4);
-      transition: transform 0.1s; -webkit-appearance: none;
-    }
-    .btn-primary:active { transform: scale(0.97); }
-    .error-box {
-      padding: 12px 14px; background: #fef2f2; border: 1px solid #fecaca;
-      border-radius: 10px; color: #dc2626; font-size: 13px;
-      margin-bottom: 16px; font-weight: 500; display: none;
-    }
-    .demo-hint {
-      margin-top: 18px; padding: 12px 14px; background: #f0f9ff;
-      border-radius: 12px; border: 1px solid #bae6fd;
-      font-size: 12px; color: #0369a1;
-    }
-    .demo-hint b { font-weight: 700; }
-    .secure-note { color: #475569; font-size: 12px; margin-top: 20px; text-align: center; }
-
-    /* ── Main App ── */
-    #appScreen { display: none; min-height: 100vh; }
-
-    .topbar {
-      background: linear-gradient(135deg, #1e3a5f, #2563eb);
-      padding: 16px 20px; position: sticky; top: 0; z-index: 100;
-      box-shadow: 0 2px 16px rgba(0,0,0,0.3);
-    }
-    .topbar-inner { max-width: 720px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
-    .topbar-name { color: white; font-weight: 700; font-size: 17px; }
-    .topbar-sub  { color: #93c5fd; font-size: 11px; font-weight: 600; letter-spacing: 0.5px; }
-    .topbar-btns { display: flex; gap: 8px; }
-    .btn-print {
-      padding: 8px 16px; background: white; color: #2563eb;
-      border: none; border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer;
-    }
-    .btn-logout {
-      padding: 8px 14px; background: transparent; color: white;
-      border: 1.5px solid rgba(255,255,255,0.4); border-radius: 8px;
-      font-size: 13px; cursor: pointer;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
     }
 
-    .content { max-width: 720px; margin: 0 auto; padding: 20px 16px 40px; }
+    .dash-header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
 
-    /* Info card */
-    .info-card {
-      background: white; border-radius: 16px; padding: 18px 20px;
-      margin-bottom: 16px; border: 1px solid #e2e8f0;
-      display: flex; align-items: center; gap: 16px;
+    .dash-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
-    .emp-avatar {
-      width: 52px; height: 52px; background: #dbeafe; border-radius: 14px;
-      display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0;
+
+    .dash-logo img {
+      width: 50px;
+      height: auto;
     }
-    .emp-name { font-size: 17px; font-weight: 800; color: #0f172a; }
-    .badges { display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap; }
+
+    .dash-logo-text {
+      font-size: 11px;
+      font-weight: 600;
+      opacity: 0.8;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .logout-btn {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .logout-btn:hover {
+      background: rgba(255,255,255,0.25);
+    }
+
+    .employee-info {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 16px;
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+
+    .employee-name {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .employee-meta {
+      font-size: 13px;
+      opacity: 0.85;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px 16px;
+    }
+
+    .dash-content {
+      padding: 20px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .summary-cards {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .summary-card {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 20px 16px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s ease;
+    }
+
+    .summary-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .summary-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 10px;
+      font-size: 20px;
+    }
+
+    .summary-icon.blue { background: #dbeafe; }
+    .summary-icon.green { background: #d1fae5; }
+    .summary-icon.orange { background: #fef3c7; }
+    .summary-icon.red { background: #fee2e2; }
+
+    .summary-value {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .summary-label {
+      font-size: 12px;
+      color: var(--text-light);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 4px;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-title::before {
+      content: '';
+      width: 4px;
+      height: 24px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+
+    .timesheet-table-wrap {
+      background: var(--card);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+
+    .timesheet-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .timesheet-table th {
+      background: var(--primary);
+      color: #fff;
+      padding: 14px 10px;
+      font-weight: 700;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+
+    .timesheet-table td {
+      padding: 12px 10px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+      font-weight: 500;
+    }
+
+    .timesheet-table tr:nth-child(even) {
+      background: #f8fafc;
+    }
+
+    .timesheet-table tr:hover {
+      background: #f1f5f9;
+    }
+
+    .timesheet-table .day-cell {
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .timesheet-table .sun-day {
+      background: #fef3c7 !important;
+      color: #92400e;
+      font-weight: 700;
+    }
+
+    .timesheet-table .hol-day {
+      background: #fee2e2 !important;
+      color: #991b1b;
+      font-weight: 700;
+    }
+
     .badge {
-      padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600;
-      background: #f1f5f9; color: #475569;
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
     }
-    .badge.blue { background: #dbeafe; color: #1d4ed8; }
 
-    /* Stats grid */
-    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
-    .stat-card {
-      background: white; border-radius: 14px; padding: 16px;
-      border: 1px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-    }
-    .stat-top { display: flex; justify-content: space-between; align-items: flex-start; }
-    .stat-label { font-size: 12px; color: #64748b; font-weight: 500; }
-    .stat-icon  { font-size: 20px; }
-    .stat-value { font-size: 30px; font-weight: 800; margin-top: 4px; line-height: 1; }
-    .stat-unit  { font-size: 13px; font-weight: 500; color: #94a3b8; margin-left: 4px; }
+    .badge-sun { background: #fef3c7; color: #92400e; }
+    .badge-hol { background: #fee2e2; color: #991b1b; }
+    .badge-norm { background: #e0e7ff; color: #3730a3; }
 
-    /* Table */
-    .table-card {
-      background: white; border-radius: 16px; overflow: hidden;
-      border: 1px solid #e2e8f0; margin-bottom: 16px;
+    .totals-card {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: #fff;
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: var(--shadow-lg);
+      margin-bottom: 24px;
     }
-    .table-header {
-      padding: 14px 20px; border-bottom: 1px solid #f1f5f9;
-      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;
-    }
-    .table-header-title { font-weight: 700; color: #0f172a; font-size: 15px; }
-    .legend { display: flex; gap: 10px; }
-    .legend-item { font-size: 11px; padding: 3px 8px; border-radius: 6px; font-weight: 600; }
 
-    .ts-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-    .ts-table thead tr { background: #f8fafc; }
-    .ts-table thead th {
-      padding: 10px 12px; text-align: center; font-weight: 700;
-      font-size: 12px; border-bottom: 2px solid #e2e8f0; letter-spacing: 0.3px;
+    .totals-title {
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      opacity: 0.8;
+      margin-bottom: 16px;
     }
-    .ts-table tbody tr { border-bottom: 1px solid #f8fafc; }
-    .ts-table tbody tr.sunday  { background: #fffbeb; }
-    .ts-table tbody tr.holiday { background: #fdf4ff; }
-    .ts-table tbody tr.normal  { background: white; }
-    .ts-table td { padding: 9px 12px; text-align: center; }
-    .dt-cell { font-weight: 700; color: #374151; }
-    .day-tag { display: block; font-size: 9px; font-weight: 700; margin-top: 1px; }
-    .ts-table tfoot tr { background: #f8fafc; border-top: 2px solid #e2e8f0; }
-    .ts-table tfoot td { padding: 11px 12px; font-weight: 800; text-align: center; }
 
-    /* Notes */
+    .totals-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .total-item {
+      text-align: center;
+    }
+
+    .total-value {
+      font-size: 26px;
+      font-weight: 800;
+    }
+
+    .total-label {
+      font-size: 12px;
+      opacity: 0.8;
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
     .notes-card {
-      background: #fffbeb; border: 1.5px solid #fde68a;
-      border-radius: 14px; padding: 16px 20px;
-    }
-    .notes-title { font-weight: 700; color: #92400e; font-size: 14px; margin-bottom: 8px; }
-    .notes-text  { font-size: 13px; color: #78350f; line-height: 1.8; }
-
-    /* Install banner */
-    #installBanner {
-      position: fixed; bottom: 20px; left: 16px; right: 16px;
-      background: #0f172a; color: white; border-radius: 16px;
-      padding: 16px 20px; display: none; z-index: 999;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-      flex-direction: row; align-items: center; justify-content: space-between; gap: 12px;
-    }
-    .install-text { font-size: 14px; font-weight: 600; flex: 1; }
-    .install-text span { font-size: 12px; color: #94a3b8; display: block; font-weight: 400; margin-top: 2px; }
-    .btn-install {
-      padding: 10px 18px; background: #2563eb; color: white;
-      border: none; border-radius: 10px; font-weight: 700; font-size: 14px; cursor: pointer; white-space: nowrap;
-    }
-    .btn-dismiss { background: none; border: none; color: #64748b; font-size: 20px; cursor: pointer; }
-
-    @media print {
-      .topbar-btns, #installBanner { display: none !important; }
-      .topbar { position: relative; }
-      body { background: white; }
+      background: var(--card);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+      border-left: 4px solid var(--accent);
     }
 
-    @keyframes shake {
-      0%,100% { transform: translateX(0); }
-      20% { transform: translateX(-8px); }
-      40% { transform: translateX(8px); }
-      60% { transform: translateX(-5px); }
-      80% { transform: translateX(5px); }
+    .notes-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
     }
-    .shake { animation: shake 0.4s ease; }
+
+    .notes-text {
+      font-size: 14px;
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 24px;
+      font-size: 12px;
+      color: var(--text-light);
+    }
+
+    .footer img {
+      width: 80px;
+      height: auto;
+      margin-bottom: 8px;
+      opacity: 0.6;
+    }
+
+    /* Loading */
+    .loading-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(255,255,255,0.9);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .loading-overlay.show { display: flex; }
+
+    .spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid var(--border);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      .login-card { padding: 32px 24px; border-radius: 20px; }
+      .logo-container img { width: 160px; }
+      .summary-cards { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .summary-card { padding: 16px 12px; }
+      .summary-value { font-size: 18px; }
+      .timesheet-table-wrap { border-radius: 16px; overflow-x: auto; }
+      .timesheet-table { min-width: 600px; }
+      .totals-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+      .total-value { font-size: 20px; }
+    }
   </style>
 </head>
 <body>
 
-<!-- ── LOGIN ─────────────────────────────────────────────────────────── -->
-<div id="loginScreen">
-  <div class="logo-wrap">📋</div>
-  <div class="app-title">Timesheet Portal</div>
-  <div class="app-sub">NASER M. AL-BADDAH & PARTNER</div>
-
-  <div class="card" id="loginCard">
-    <h2>Apna Timesheet Dekho</h2>
-
-    <label class="field-label">Employee ID</label>
-    <input class="field-input" id="empIdInput" type="number" inputmode="numeric" placeholder="e.g. 220140" />
-
-    <label class="field-label">Date of Birth</label>
-    <input class="field-input" id="dobInput" type="date" />
-
-    <div class="error-box" id="errorBox">⚠️ Employee ID ya Date of Birth galat hai!</div>
-
-    <button class="btn-primary" onclick="doLogin()">Timesheet Dekho →</button>
-
-    <div class="demo-hint">
-      🧪 <b>Demo:</b><br/>
-      ID: <b>220140</b> | DOB: <b>15/06/1985</b><br/>
-      ID: <b>220201</b> | DOB: <b>22/03/1990</b>
-    </div>
-  </div>
-  <div class="secure-note">🔒 Secure login — sirf aapka data dikhega</div>
+<!-- LOADING -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+  <div style="font-weight:600;color:var(--primary);">Loading...</div>
 </div>
 
-<!-- ── APP ───────────────────────────────────────────────────────────── -->
-<div id="appScreen">
-  <div class="topbar">
-    <div class="topbar-inner">
-      <div>
-        <div class="topbar-sub">TIMESHEET PORTAL</div>
-        <div class="topbar-name" id="topName">—</div>
-      </div>
-      <div class="topbar-btns">
-        <button class="btn-print" onclick="window.print()">🖨️ Print</button>
-        <button class="btn-logout" onclick="doLogout()">Logout</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="content">
-    <!-- Info -->
-    <div class="info-card">
-      <div class="emp-avatar">👷</div>
-      <div style="flex:1">
-        <div class="emp-name" id="empName">—</div>
-        <div class="badges">
-          <span class="badge" id="empIdBadge"></span>
-          <span class="badge" id="desgBadge"></span>
-          <span class="badge blue" id="monthBadge"></span>
-        </div>
-      </div>
+<!-- LOGIN SCREEN -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-card">
+    <div class="logo-container">
+      <img src="https://i.imgur.com/placeholder.png" alt="NBTC Logo" id="loginLogo">
+      <div class="company-name">NASER M. AL-BADDAH & PARTNER</div>
     </div>
 
-    <!-- Stats -->
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-top">
-          <div class="stat-label">Working Hours</div>
-          <div class="stat-icon">⏱️</div>
-        </div>
-        <div class="stat-value" id="statWH" style="color:#2563eb">0<span class="stat-unit">hrs</span></div>
+    <h1 class="login-title">Timesheet Portal</h1>
+    <p class="login-subtitle">View your monthly timesheet securely</p>
+
+    <form id="loginForm" onsubmit="return false;">
+      <div class="form-group">
+        <label class="form-label">Employee ID</label>
+        <input type="text" class="form-input" id="empId" placeholder="Enter Employee ID" maxlength="10" autocomplete="off">
       </div>
-      <div class="stat-card">
-        <div class="stat-top">
-          <div class="stat-label">Overtime</div>
-          <div class="stat-icon">🕐</div>
-        </div>
-        <div class="stat-value" id="statOT" style="color:#7c3aed">0<span class="stat-unit">hrs</span></div>
+      <div class="form-group">
+        <label class="form-label">Date of Birth</label>
+        <input type="text" class="form-input" id="dob" placeholder="DD/MM/YYYY" maxlength="10" autocomplete="off">
       </div>
-      <div class="stat-card">
-        <div class="stat-top">
-          <div class="stat-label">Travel Allow.</div>
-          <div class="stat-icon">🚌</div>
-        </div>
-        <div class="stat-value" id="statTA" style="color:#0891b2">0<span class="stat-unit">days</span></div>
+      <button type="submit" class="login-btn" id="loginBtn">View Timesheet</button>
+    </form>
+
+    <div class="error-msg" id="errorMsg">
+      <span>⚠️</span>
+      <span>Invalid Employee ID or Date of Birth. Please try again.</span>
+    </div>
+
+    <div class="demo-section">
+      <div class="demo-title">Demo Credentials</div>
+      <div class="demo-item">
+        <strong>ID:</strong> 220140 &nbsp;|&nbsp; <strong>DOB:</strong> 15/06/1985
       </div>
-      <div class="stat-card">
-        <div class="stat-top">
-          <div class="stat-label">Incentives</div>
-          <div class="stat-icon">⭐</div>
-        </div>
-        <div class="stat-value" id="statINC" style="color:#16a34a">0<span class="stat-unit">days</span></div>
+      <div class="demo-item">
+        <strong>ID:</strong> 220201 &nbsp;|&nbsp; <strong>DOB:</strong> 22/03/1990
       </div>
     </div>
 
-    <!-- Table -->
-    <div class="table-card">
-      <div class="table-header">
-        <div class="table-header-title">📅 Attendance & Hours</div>
-        <div class="legend">
-          <span class="legend-item" style="background:#fffbeb;color:#92400e">🟡 Sunday</span>
-          <span class="legend-item" style="background:#fdf4ff;color:#6b21a8">🟣 Holiday</span>
-        </div>
-      </div>
-      <div style="overflow-x:auto">
-        <table class="ts-table">
-          <thead>
-            <tr>
-              <th style="color:#374151">DT</th>
-              <th style="color:#374151">Project</th>
-              <th style="color:#2563eb">WH</th>
-              <th style="color:#7c3aed">OT</th>
-              <th style="color:#16a34a">Incentive</th>
-              <th style="color:#0891b2">TA</th>
-            </tr>
-          </thead>
-          <tbody id="tsBody"></tbody>
-          <tfoot>
-            <tr>
-              <td colspan="2" style="text-align:right;color:#374151">TOTAL</td>
-              <td id="ftWH" style="color:#2563eb">0</td>
-              <td id="ftOT" style="color:#7c3aed">0</td>
-              <td id="ftINC" style="color:#16a34a">—</td>
-              <td id="ftTA" style="color:#0891b2">0</td>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
-    </div>
-
-    <!-- Notes -->
-    <div class="notes-card" id="notesCard" style="display:none">
-      <div class="notes-title">📢 Payment Notice</div>
-      <div class="notes-text" id="notesText"></div>
+    <div class="security-note">
+      <span>🔒</span> Secure login — only your data will be displayed
     </div>
   </div>
 </div>
 
-<!-- ── INSTALL BANNER ─────────────────────────────────────────────── -->
-<div id="installBanner">
-  <div class="install-text">
-    📲 App Install Karo
-    <span>Home screen pe shortcut banao</span>
+<!-- DASHBOARD -->
+<div class="dashboard" id="dashboard">
+  <div class="dash-header">
+    <div class="dash-header-top">
+      <div class="dash-logo">
+        <img src="https://i.imgur.com/placeholder.png" alt="NBTC" id="dashLogo">
+        <div class="dash-logo-text">NASER M. AL-BADDAH & PARTNER</div>
+      </div>
+      <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+    <div class="employee-info" id="employeeInfo"></div>
   </div>
-  <button class="btn-install" id="installBtn">Install</button>
-  <button class="btn-dismiss" onclick="document.getElementById('installBanner').style.display='none'">✕</button>
+
+  <div class="dash-content">
+    <div class="summary-cards" id="summaryCards"></div>
+
+    <h2 class="section-title">Monthly Timesheet</h2>
+    <div class="timesheet-table-wrap">
+      <table class="timesheet-table" id="timesheetTable">
+        <thead>
+          <tr>
+            <th>Day</th>
+            <th>Project</th>
+            <th>Work Hrs</th>
+            <th>OT Hrs</th>
+            <th>Incentive</th>
+            <th>TA</th>
+            <th>Type</th>
+          </tr>
+        </thead>
+        <tbody id="timesheetBody"></tbody>
+      </table>
+    </div>
+
+    <div class="totals-card" id="totalsCard"></div>
+
+    <div class="notes-card" id="notesCard"></div>
+
+    <div class="footer">
+      <img src="https://i.imgur.com/placeholder.png" alt="NBTC" id="footerLogo">
+      <div>© 2026 NBTC — NASER M. AL-BADDAH & PARTNER</div>
+      <div style="margin-top:4px;opacity:0.7;">All rights reserved.</div>
+    </div>
+  </div>
 </div>
 
 <script>
-// ── Data ────────────────────────────────────────────────────────────────────
-// Admin: Yahan naye employees add karo format: { empId, dob:"DDMMYYYY", name, ... }
+// ==================== EMPLOYEE DATA ====================
 const EMPLOYEES = [
   {
-    empId: "220140", dob: "15061985",
-    name: "SRIMANTA KUMAR SAHU", designation: "FITTER-PIPE",
-    month: "JUNE 2026", company: "NASER M. AL-BADDAH & PARTNER", project: "HIGHLAND-2",
+    empId: "220140",
+    dob: "15/06/1985",
+    name: "SRIMANTA KUMAR SAHU",
+    designation: "HELPER",
+    month: "JUNE 2026",
+    company: "NASER M. AL-BADDAH & PARTNER",
+    project: "HIGHLAND-2",
     rows: [
-      {dt:1,  project:"P024",    wh:8, ot:3, incentive:"",  ta:1, sun:false, hol:false},
-      {dt:2,  project:"P024",    wh:8, ot:3, incentive:"",  ta:1, sun:false, hol:false},
-      {dt:3,  project:"P024",    wh:8, ot:5, incentive:"",  ta:1, sun:false, hol:false},
-      {dt:4,  project:"P024",    wh:8, ot:5, incentive:"",  ta:1, sun:false, hol:false},
-      {dt:5,  project:"P024",    wh:8, ot:3, incentive:"",  ta:1, sun:false, hol:false},
-      {dt:6,  project:"P024",    wh:8, ot:2, incentive:"",  ta:0, sun:false, hol:false},
-      {dt:7,  project:"SUNDAY",  wh:8, ot:0, incentive:"H", ta:0, sun:true,  hol:false},
-      {dt:8,  project:"P024",    wh:8, ot:2, incentive:"",  ta:1, sun:false, hol:false},
-      {dt:9,  project:"P024",    wh:8, ot:2, incentive:"",  ta:1, sun:false, hol:false},
-      {dt:10, project:"P024",    wh:8, ot:2, incentive:"",  ta:1, sun:false, hol:false},
-      {dt:11, project:"P024",    wh:8, ot:2, incentive:"",  ta:1, sun:false, hol:false},
-      {dt:12, project:"P024",    wh:8, ot:2, incentive:"",  ta:1, sun:false, hol:false},
-      {dt:13, project:"P024",    wh:8, ot:2, incentive:"",  ta:1, sun:false, hol:false},
-      {dt:14, project:"SUNDAY",  wh:0, ot:2, incentive:"",  ta:0, sun:true,  hol:false},
-      {dt:15, project:"HOLIDAY", wh:8, ot:0, incentive:"",  ta:0, sun:false, hol:true },
-      {dt:16, project:"P024",    wh:8, ot:2, incentive:"",  ta:1, sun:false, hol:false},
-      {dt:17, project:"P024",    wh:8, ot:2, incentive:"",  ta:1, sun:false, hol:false},
-      {dt:18, project:"P024",    wh:8, ot:2, incentive:"",  ta:1, sun:false, hol:false},
-      {dt:19, project:"P024",    wh:8, ot:2, incentive:"",  ta:1, sun:false, hol:false},
-      {dt:20, project:"P024",    wh:8, ot:2, incentive:"",  ta:1, sun:false, hol:false},
-      {dt:21, project:"SUNDAY",  wh:8, ot:0, incentive:"",  ta:0, sun:true,  hol:false},
-      {dt:22, project:"P024",    wh:8, ot:0, incentive:"",  ta:1, sun:false, hol:false},
-      {dt:23, project:"P024",    wh:8, ot:0, incentive:"",  ta:1, sun:false, hol:false},
-      {dt:24, project:"P024",    wh:8, ot:0, incentive:"",  ta:1, sun:false, hol:false},
-      {dt:25, project:"P024",    wh:8, ot:0, incentive:"",  ta:1, sun:false, hol:false},
-      {dt:26, project:"P024",    wh:8, ot:0, incentive:"",  ta:1, sun:false, hol:false},
-      {dt:27, project:"P024",    wh:8, ot:0, incentive:"",  ta:1, sun:false, hol:false},
-      {dt:28, project:"SUNDAY",  wh:8, ot:0, incentive:"",  ta:0, sun:true,  hol:false},
-      {dt:29, project:"P024",    wh:8, ot:0, incentive:"",  ta:1, sun:false, hol:false},
-      {dt:30, project:"P024",    wh:8, ot:0, incentive:"",  ta:1, sun:false, hol:false},
+      {dt:1, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
+      {dt:2, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
+      {dt:3, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
+      {dt:4, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
+      {dt:5, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
+      {dt:6, project:"P024", wh:0, ot:0, incentive:"", ta:0, sun:true, hol:false},
+      {dt:7, project:"P024", wh:0, ot:0, incentive:"", ta:0, sun:true, hol:false},
+      {dt:8, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
+      {dt:9, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
+      {dt:10, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
+      {dt:11, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
+      {dt:12, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
+      {dt:13, project:"P024", wh:0, ot:0, incentive:"", ta:0, sun:true, hol:false},
+      {dt:14, project:"P024", wh:0, ot:0, incentive:"", ta:0, sun:true, hol:false},
+      {dt:15, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
+      {dt:16, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
+      {dt:17, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
+      {dt:18, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
+      {dt:19, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
+      {dt:20, project:"P024", wh:0, ot:0, incentive:"", ta:0, sun:true, hol:false},
+      {dt:21, project:"P024", wh:0, ot:0, incentive:"", ta:0, sun:true, hol:false},
+      {dt:22, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
+      {dt:23, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
+      {dt:24, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
+      {dt:25, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
+      {dt:26, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
+      {dt:27, project:"P024", wh:0, ot:0, incentive:"", ta:0, sun:true, hol:false},
+      {dt:28, project:"P024", wh:0, ot:0, incentive:"", ta:0, sun:true, hol:false},
+      {dt:29, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
+      {dt:30, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
     ],
-    notes: "जून 2026 का वेतन सभी कर्मचारियों को 1 जून 2026 से 30 जून 2026 तक की अवधि के लिए दिया जाएगा। ओवरटाइम (OT) एवं यात्रा भत्ता (TA) का भुगतान जुलाई 2026 के वेतन के साथ किया जाएगा।"
+    notes: "Payment will be processed on the 5th of next month. Please verify your bank details with HR."
   },
   {
-    empId: "220201", dob: "22031990",
-    name: "RAJESH KUMAR SHARMA", designation: "WELDER",
-    month: "JUNE 2026", company: "NASER M. AL-BADDAH & PARTNER", project: "HIGHLAND-2",
+    empId: "220201",
+    dob: "22/03/1990",
+    name: "RAJESH KUMAR SHARMA",
+    designation: "HELPER",
+    month: "JUNE 2026",
+    company: "NASER M. AL-BADDAH & PARTNER",
+    project: "HIGHLAND-2",
     rows: [
-      {dt:1,  project:"P024",    wh:8, ot:2, incentive:"",  ta:1, sun:false, hol:false},
-      {dt:2,  project:"P024",    wh:8, ot:2, incentive:"",  ta:1, sun:false, hol:false},
-      {dt:3,  project:"P024",    wh:8, ot:4, incentive:"",  ta:1, sun:false, hol:false},
-      {dt:4,  project:"P024",    wh:8, ot:4, incentive:"",  ta:1, sun:false, hol:false},
-      {dt:5,  project:"P024",    wh:8, ot:2, incentive:"",  ta:1, sun:false, hol:false},
-      {dt:6,  project:"P024",    wh:8, ot:2, incentive:"",  ta:0, sun:false, hol:false},
-      {dt:7,  project:"SUNDAY",  wh:8, ot:0, incentive:"H", ta:0, sun:true,  hol:false},
-      {dt:8,  project:"P024",    wh:8, ot:2, incentive:"",  ta:1, sun:false, hol:false},
-      {dt:9,  project:"P024",    wh:8, ot:2, incentive:"",  ta:1, sun:false, hol:false},
-      {dt:10, project:"P024",    wh:8, ot:2, incentive:"",  ta:1, sun:false, hol:false},
-      {dt:11, project:"P024",    wh:8, ot:2, incentive:"",  ta:1, sun:false, hol:false},
-      {dt:12, project:"P024",    wh:8, ot:2, incentive:"",  ta:1, sun:false, hol:false},
-      {dt:13, project:"P024",    wh:8, ot:2, incentive:"",  ta:1, sun:false, hol:false},
-      {dt:14, project:"SUNDAY",  wh:0, ot:0, incentive:"",  ta:0, sun:true,  hol:false},
-      {dt:15, project:"HOLIDAY", wh:8, ot:0, incentive:"",  ta:0, sun:false, hol:true },
-      {dt:16, project:"P024",    wh:8, ot:2, incentive:"",  ta:1, sun:false, hol:false},
-      {dt:17, project:"P024",    wh:8, ot:2, incentive:"",  ta:1, sun:false, hol:false},
-      {dt:18, project:"P024",    wh:8, ot:2, incentive:"",  ta:1, sun:false, hol:false},
-      {dt:19, project:"P024",    wh:8, ot:2, incentive:"",  ta:1, sun:false, hol:false},
-      {dt:20, project:"P024",    wh:8, ot:2, incentive:"",  ta:1, sun:false, hol:false},
-      {dt:21, project:"SUNDAY",  wh:8, ot:0, incentive:"",  ta:0, sun:true,  hol:false},
-      {dt:22, project:"P024",    wh:8, ot:0, incentive:"",  ta:1, sun:false, hol:false},
-      {dt:23, project:"P024",    wh:8, ot:0, incentive:"",  ta:1, sun:false, hol:false},
-      {dt:24, project:"P024",    wh:8, ot:0, incentive:"",  ta:1, sun:false, hol:false},
-      {dt:25, project:"P024",    wh:8, ot:0, incentive:"",  ta:1, sun:false, hol:false},
-      {dt:26, project:"P024",    wh:8, ot:0, incentive:"",  ta:1, sun:false, hol:false},
-      {dt:27, project:"P024",    wh:8, ot:0, incentive:"",  ta:1, sun:false, hol:false},
-      {dt:28, project:"SUNDAY",  wh:8, ot:0, incentive:"",  ta:0, sun:true,  hol:false},
-      {dt:29, project:"P024",    wh:8, ot:0, incentive:"",  ta:1, sun:false, hol:false},
-      {dt:30, project:"P024",    wh:8, ot:0, incentive:"",  ta:1, sun:false, hol:false},
-    ],
-    notes: "जून 2026 का वेतन सभी कर्मचारियों को 1 जून 2026 से 30 जून 2026 तक की अवधि के लिए दिया जाएगा।"
-  }
-];
-
-// ── DOB Helper ───────────────────────────────────────────────────────────────
-function parseDOB(dateInputVal) {
-  // date input → YYYY-MM-DD → convert to DDMMYYYY
-  if (!dateInputVal) return "";
-  const parts = dateInputVal.split("-");
-  if (parts.length === 3) return parts[2] + parts[1] + parts[0];
-  return dateInputVal.replace(/[^0-9]/g, "");
-}
-
-// ── Login ────────────────────────────────────────────────────────────────────
-function doLogin() {
-  const empId = document.getElementById("empIdInput").value.trim();
-  const dob   = parseDOB(document.getElementById("dobInput").value);
-  const errBox = document.getElementById("errorBox");
-  const card   = document.getElementById("loginCard");
-
-  if (!empId || !dob) {
-    errBox.textContent = "⚠️ Dono fields bharo!";
-    errBox.style.display = "block"; return;
-  }
-
-  const emp = EMPLOYEES.find(e => e.empId === empId && e.dob === dob);
-  if (!emp) {
-    errBox.textContent = "⚠️ Employee ID ya Date of Birth galat hai!";
-    errBox.style.display = "block";
-    card.classList.add("shake");
-    setTimeout(() => card.classList.remove("shake"), 500);
-    return;
-  }
-
-  errBox.style.display = "none";
-  showApp(emp);
-}
-
-// Enter key
-document.getElementById("empIdInput").addEventListener("keydown", e => { if(e.key==="Enter") doLogin(); });
-document.getElementById("dobInput").addEventListener("keydown",   e => { if(e.key==="Enter") doLogin(); });
-
-// ── Show App ─────────────────────────────────────────────────────────────────
-function showApp(emp) {
-  document.getElementById("loginScreen").style.display = "none";
-  document.getElementById("appScreen").style.display   = "block";
-
-  // Header
-  document.getElementById("topName").textContent  = emp.name;
-  document.getElementById("empName").textContent  = emp.name;
-  document.getElementById("empIdBadge").textContent  = "ID: " + emp.empId;
-  document.getElementById("desgBadge").textContent   = emp.designation;
-  document.getElementById("monthBadge").textContent  = emp.month;
-
-  // Totals
-  const rows = emp.rows || [];
-  const totalWH  = rows.reduce((s,r) => s + (r.wh  || 0), 0);
-  const totalOT  = rows.reduce((s,r) => s + (r.ot  || 0), 0);
-  const totalTA  = rows.reduce((s,r) => s + (r.ta  || 0), 0);
-  const totalINC = rows.filter(r => r.incentive).length;
-
-  document.getElementById("statWH").innerHTML  = totalWH  + '<span class="stat-unit">hrs</span>';
-  document.getElementById("statOT").innerHTML  = totalOT  + '<span class="stat-unit">hrs</span>';
-  document.getElementById("statTA").innerHTML  = totalTA  + '<span class="stat-unit">days</span>';
-  document.getElementById("statINC").innerHTML = totalINC + '<span class="stat-unit">days</span>';
-
-  // Table
-  const tbody = document.getElementById("tsBody");
-  tbody.innerHTML = "";
-  rows.forEach(r => {
-    const cls = r.sun ? "sunday" : r.hol ? "holiday" : "normal";
-    const tag = r.sun ? '<span class="day-tag" style="color:#d97706">SUN</span>'
-              : r.hol ? '<span class="day-tag" style="color:#7c3aed">HOL</span>' : "";
-    tbody.innerHTML += `
-      <tr class="${cls}">
-        <td class="dt-cell">${r.dt}${tag}</td>
-        <td style="color:#64748b;font-size:13px">${r.project}</td>
-        <td style="color:#2563eb;font-weight:700">${r.wh || "—"}</td>
-        <td style="color:${r.ot ? '#7c3aed' : '#cbd5e1'};font-weight:700">${r.ot || "—"}</td>
-        <td style="color:#16a34a;font-weight:700">${r.incentive || "—"}</td>
-        <td style="color:${r.ta ? '#0891b2' : '#cbd5e1'};font-weight:700">${r.ta || "—"}</td>
-      </tr>`;
-  });
-
-  // Footer totals
-  document.getElementById("ftWH").textContent  = totalWH;
-  document.getElementById("ftOT").textContent  = totalOT;
-  document.getElementById("ftINC").textContent = totalINC || "—";
-  document.getElementById("ftTA").textContent  = totalTA;
-
-  // Notes
-  if (emp.notes) {
-    document.getElementById("notesText").textContent = emp.notes;
-    document.getElementById("notesCard").style.display = "block";
-  }
-
-  window.scrollTo(0, 0);
-}
-
-// ── Logout ───────────────────────────────────────────────────────────────────
-function doLogout() {
-  document.getElementById("appScreen").style.display   = "none";
-  document.getElementById("loginScreen").style.display = "flex";
-  document.getElementById("empIdInput").value = "";
-  document.getElementById("dobInput").value   = "";
-  document.getElementById("errorBox").style.display = "none";
-  document.getElementById("notesCard").style.display = "none";
-}
-
-// ── PWA Install ───────────────────────────────────────────────────────────────
-let deferredPrompt;
-window.addEventListener("beforeinstallprompt", e => {
-  e.preventDefault();
-  deferredPrompt = e;
-  const banner = document.getElementById("installBanner");
-  banner.style.display = "flex";
-  document.getElementById("installBtn").onclick = async () => {
-    banner.style.display = "none";
-    deferredPrompt.prompt();
-    await deferredPrompt.userChoice;
-    deferredPrompt = null;
-  };
-});
-window.addEventListener("appinstalled", () => {
-  document.getElementById("installBanner").style.display = "none";
-});
-
-// ── Service Worker ────────────────────────────────────────────────────────────
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("sw.js").catch(() => {});
-}
-</script>
-</body>
-</html>
+      {dt:1, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
+      {dt:2, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
+      {dt:3, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
+      {dt:4, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
+      {dt:5, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
+      {dt:6, project:"P024", wh:0, ot:0, incentive:"", ta:0, sun:true, hol:false},
+      {dt:7, project:"P024", wh:0, ot:0, incentive:"", ta:0, sun:true, hol:false},
+      {dt:8, project:"P024", wh:8, ot:2, incentive:"", ta:1, sun:false, hol:false},
+      {dt:9, project:
